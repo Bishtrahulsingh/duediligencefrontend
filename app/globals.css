@@ -1,26 +1,143 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --amber-glow:  rgba(232, 160, 32, 0.10);
+  --amber-glow2: rgba(232, 160, 32, 0.05);
+  --amber-glow3: rgba(232, 160, 32, 0.18);
+  --red-dim:     rgba(224,  85,  85, 0.15);
+  --green-dim:   rgba( 72, 196, 122, 0.12);
+  --yellow-dim:  rgba(232, 192,  64, 0.15);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0c0d0f;
+  color: #eae8e2;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* scrollbar */
+::-webkit-scrollbar        { width: 5px; height: 5px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: #1f232c; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2c3140; }
+
+/* animation delay utilities */
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.12s; }
+.delay-3 { animation-delay: 0.20s; }
+.delay-4 { animation-delay: 0.28s; }
+.delay-5 { animation-delay: 0.36s; }
+
+/* grid background mask */
+.grid-mask {
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 100%);
+}
+
+.grid-mask-auth {
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 20% 50%, black 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 80% 80% at 20% 50%, black 20%, transparent 80%);
+}
+
+/* ticker fade edges */
+.ticker-fade::before,
+.ticker-fade::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+.ticker-fade::before {
+  left: 0;
+  background: linear-gradient(90deg, #111318, transparent);
+}
+.ticker-fade::after {
+  right: 0;
+  background: linear-gradient(-90deg, #111318, transparent);
+}
+
+/* hero gradient orb */
+.hero-orb {
+  background: radial-gradient(ellipse, rgba(232, 160, 32, 0.07) 0%, transparent 70%);
+}
+
+/* feature card top line */
+.feature-card-line::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e8a020, transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.feature-card-line:hover::before {
+  opacity: 1;
+}
+
+/* pipeline arrow */
+.pipeline-arrow {
+  position: relative;
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, #222630, #a06510, #222630);
+  flex-shrink: 0;
+}
+.pipeline-arrow::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: -3px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid #a06510;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+}
+
+/* password strength bars */
+.pw-bar-weak   { background-color: #e05555; }
+.pw-bar-medium { background-color: #e8a020; }
+.pw-bar-strong { background-color: #48c47a; }
+
+/* conf bar fill */
+.conf-bar-fill {
+  background: linear-gradient(90deg, #a06510, #e8a020);
+}
+
+/* auth left background glow */
+.auth-left-orb {
+  background: radial-gradient(ellipse, rgba(232, 160, 32, 0.06) 0%, transparent 65%);
+}
+
+/* CTA section bg */
+.cta-orb {
+  background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(232, 160, 32, 0.05) 0%, transparent 70%);
+}
+
+/* terminal glow */
+.terminal-glow {
+  animation: glowPulse 4s ease infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(232,160,32,0.08); }
+  50%       { box-shadow: 0 0 40px rgba(232,160,32,0.22); }
+}
+
+/* nav backdrop */
+.nav-backdrop {
+  background: rgba(12, 13, 15, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
