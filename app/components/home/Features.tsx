@@ -43,23 +43,23 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="px-14 py-[90px] flex flex-col gap-20">
+    <section id='Features' className="px-14 py-[90px] flex flex-col gap-20">
       {/* Header */}
       <div className="text-center max-w-[560px] mx-auto">
         <div className="font-mono text-[10px] tracking-[2px] uppercase text-dl-amber mb-3.5">
           What we do
         </div>
         <h2 className="font-serif font-light text-[clamp(28px,4vw,42px)] leading-[1.15] tracking-tight text-dl-text mb-4">
-          Due diligence at{' '}
+          Analyze company filings at{' '}
           <em className="italic text-dl-amber">machine speed</em>
         </h2>
         <p className="text-[14px] text-dl-text2 leading-[1.7] font-light">
-          Stop spending hours building context. Get a structured baseline in minutes — grounded strictly in the documents you upload.
+        Stop spending hours reading filings. Ask questions and get structured answers in minutes — grounded strictly in the documents you upload.
         </p>
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-3 gap-3.5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3.5">
         {features.map(({ icon: Icon, title, desc, tag }) => (
           <div
             key={title}

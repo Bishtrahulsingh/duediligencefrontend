@@ -23,14 +23,15 @@ export default function Nav() {
         </Link>
 
         {/* Links */}
-        <div className="flex items-center gap-1.5 ml-auto">
+        <div className="hidden sm:flex items-center gap-1.5 ml-auto">
           {['Features', 'Pipeline', 'Docs'].map((item) => (
-            <button
+            <Link
               key={item}
+              href={`#${item}`}
               className="px-3.5 py-1.5 text-[13px] text-dl-text2 rounded-lg transition-colors hover:text-dl-text hover:bg-dl-surface2 font-sans"
             >
               {item}
-            </button>
+            </Link>
           ))}
           <Link
             href="/login"
@@ -40,7 +41,7 @@ export default function Nav() {
           </Link>
           <Link
             href="/signup"
-            className="px-4 py-2 text-[13px] font-medium text-dl-bg bg-dl-amber border border-dl-amber rounded-lg transition-all hover:bg-[#f0b030]"
+            className="ml-5 px-4 py-2 text-[13px] font-medium text-dl-bg bg-dl-amber border border-dl-amber rounded-lg transition-all hover:bg-[#f0b030]"
           >
             Get started →
           </Link>

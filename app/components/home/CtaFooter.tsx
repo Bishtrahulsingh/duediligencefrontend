@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export function CTA() {
   return (
-    <section className="relative px-14 py-[90px] flex flex-col items-center text-center gap-7 overflow-hidden">
+    <section className="relative px-5 md:px-14 py-[90px] flex flex-col items-center text-center gap-7 overflow-hidden">
       <div className="cta-orb absolute inset-0 pointer-events-none" />
       <h2 className="relative font-serif font-light text-[clamp(32px,5vw,56px)] leading-[1.1] tracking-[-1.5px] text-dl-text max-w-[600px]">
         Ready to run your first{' '}
@@ -16,13 +16,13 @@ export function CTA() {
           href="/signup"
           className="flex items-center gap-2 px-7 py-3.5 text-[14px] font-medium text-dl-bg bg-dl-amber border border-dl-amber rounded-[10px] transition-all hover:bg-[#f0b030]"
         >
-          Create free account →
+          Create free account
         </Link>
         <Link
           href="/login"
           className="px-7 py-3.5 text-[14px] text-dl-text2 border border-dl-border2 rounded-[10px] transition-all hover:bg-dl-surface2 hover:text-dl-text"
         >
-          Sign in
+          Signin
         </Link>
       </div>
     </section>

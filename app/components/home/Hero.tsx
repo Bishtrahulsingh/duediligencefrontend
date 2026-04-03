@@ -22,23 +22,16 @@ export default function Hero() {
       {/* Amber orb */}
       <div className="hero-orb absolute w-[600px] h-[400px] top-[10%] left-1/2 -translate-x-1/2 pointer-events-none" />
 
-      {/* Eyebrow */}
-      <div className="animate-fade-up delay-1 opacity-0 relative z-10 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(232,160,32,0.2)] bg-[rgba(232,160,32,0.08)] font-mono text-[10px] tracking-[1.5px] uppercase text-dl-amber mb-7">
-        <span className="w-1.5 h-1.5 rounded-full bg-dl-amber shadow-[0_0_6px_#e8a020] animate-pulse2" />
-        AI-Powered Due Diligence
-      </div>
-
       {/* Title */}
-      <h1 className="animate-fade-up delay-2 opacity-0 relative z-10 font-serif font-light text-[clamp(44px,7vw,80px)] leading-[1.05] tracking-[-2px] text-dl-text mb-6 max-w-[820px]">
-        Know every risk before<br />
-        you write the{' '}
-        <em className="text-dl-amber not-italic italic">cheque</em>
+      <h1 className="animate-fade-up delay-2 opacity-0 relative z-10 font-serif font-light text-[clamp(44px,5vw,80px)] leading-[1.05] tracking-[-2px] text-dl-text mb-6 max-w-[820px]">
+        Turn complex SEC filings<br />
+        into{' '}
+        <em className="text-dl-amber not-italic italic"> answers.</em>
       </h1>
 
       {/* Sub */}
-      <p className="animate-fade-up delay-3 opacity-0 relative z-10 text-[16px] text-dl-text2 max-w-[500px] leading-[1.7] font-light mb-10">
-        Upload SEC filings. Ask anything. Get analyst-grade answers grounded
-        strictly in the documents — no hallucinations, no guesswork.
+      <p className="animate-fade-up delay-3 opacity-0 relative z-10 text-[16px] text-dl-text2 max-w-[600px] leading-[1.7] font-light mb-10">
+        An AI system that analyzes SEC filings and allows users to ask questions about company financials, risks, and business operations, with every response grounded in the original documents and supported by source citations and evaluation metrics.
       </p>
 
       {/* Actions */}
@@ -63,7 +56,7 @@ export default function Hero() {
       </div>
 
       {/* Stats */}
-      <div className="animate-fade-up delay-5 opacity-0 relative z-10 flex items-center gap-10">
+      <div className="animate-fade-up delay-5 opacity-0 flex items-center flex-wrap justify-center gap-5">
         {stats.map((s, i) => (
           <div key={s.value} className="flex items-center gap-10">
             <div className="text-center">

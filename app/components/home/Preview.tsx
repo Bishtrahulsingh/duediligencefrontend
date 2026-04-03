@@ -75,7 +75,7 @@ function TerminalCard() {
 
 export default function Preview() {
   return (
-    <section className="px-14 pb-[90px] grid grid-cols-2 gap-16 items-center">
+    <section className="px-5 md:px-14 pb-22.5  flex gap-5 flex-wrap-reverse lg:flex-nowrap">
       {/* Copy */}
       <div>
         <div className="font-mono text-[10px] tracking-[2px] uppercase text-dl-amber mb-4">

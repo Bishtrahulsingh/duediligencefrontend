@@ -19,9 +19,9 @@ export default function AuthLayout({
   leftTitle, leftSubtitle, features, children,
 }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen grid grid-cols-2">
+    <div className="min-h-screen flex justify-between">
       {/* ── LEFT PANEL ── */}
-      <div className="relative flex flex-col bg-dl-surface border-r border-dl-border px-14 py-10 overflow-hidden">
+      <div className="hidden relative lg:flex lg:w-[40vw] flex-col bg-dl-surface border-r border-dl-border px-14 py-10 overflow-hidden">
         {/* Grid bg */}
         <div
           className="absolute inset-0 opacity-30 grid-mask-auth pointer-events-none"
@@ -32,7 +32,7 @@ export default function AuthLayout({
           }}
         />
         {/* Orb */}
-        <div className="auth-left-orb absolute w-[500px] h-[500px] -bottom-24 -left-24 pointer-events-none" />
+        <div className="auth-left-orb absolute w-125 h-0.5125 -bottom-24 -left-24 pointer-events-none" />
 
         {/* Brand */}
         <Link href="/" className="relative z-10 flex items-center gap-3 mb-auto no-underline w-fit">
@@ -52,7 +52,7 @@ export default function AuthLayout({
           <h2 className="font-serif font-light text-[40px] leading-[1.15] tracking-[-1.2px] text-dl-text mb-4">
             {leftTitle}
           </h2>
-          <p className="text-[14px] text-dl-text2 leading-[1.7] font-light max-w-[340px] mb-9">
+          <p className="text-[14px] text-dl-text2 leading-[1.7] font-light max-w-85 mb-9">
             {leftSubtitle}
           </p>
           <div className="flex flex-col gap-3">
@@ -80,8 +80,8 @@ export default function AuthLayout({
       </div>
 
       {/* ── RIGHT PANEL ── */}
-      <div className="flex items-center justify-center px-14 py-10 bg-dl-bg">
-        <div className="w-full max-w-[380px]">
+      <div className="flex items-center justify-center w-full px-8 lg:px-14 lg:w-[60vw] py-10 bg-dl-bg">
+        <div className="w-full max-w-95">
           {children}
         </div>
       </div>

@@ -15,7 +15,7 @@ const nodes = [
 
 export default function PipelineStrip() {
   return (
-    <div className="border-t border-b border-dl-border bg-dl-surface px-14 py-16">
+    <div id='Pipeline' className="border-t border-b border-dl-border bg-dl-surface px-14 py-16">
       <div className="font-mono text-[10px] tracking-[2px] uppercase text-dl-text3 text-center mb-9">
         How it works
       </div>

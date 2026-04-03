@@ -50,7 +50,7 @@ function StrengthBar({ score }: { score: number }) {
       {[0, 1, 2, 3].map((i) => (
         <div
           key={i}
-          className={`flex-1 h-[3px] rounded-full transition-all duration-300 ${barClass(i)}`}
+          className={`flex-1 h-0.75 rounded-full transition-all duration-300 ${barClass(i)}`}
         />
       ))}
     </div>

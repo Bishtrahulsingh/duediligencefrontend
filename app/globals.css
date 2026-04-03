@@ -1,6 +1,47 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* ── Fonts ───────────────────────────────────────── */
+  --font-serif:  var(--font-fraunces), Georgia, serif;
+  --font-sans:   var(--font-dm-sans),  system-ui, sans-serif;
+  --font-mono:   var(--font-dm-mono),  monospace;
+
+  /* ── Color tokens ────────────────────────────────── */
+  --color-dl-bg:       #0c0d0f;
+  --color-dl-surface:  #111318;
+  --color-dl-surface2: #161a22;
+  --color-dl-surface3: #1c2030;
+
+  --color-dl-border:   #1f232c;
+  --color-dl-border2:  #2c3140;
+
+  --color-dl-text:     #eae8e2;
+  --color-dl-text2:    #9a9690;
+  --color-dl-text3:    #5a5850;
+
+  --color-dl-amber:    #e8a020;
+  --color-dl-red:      #e05555;
+  --color-dl-green:    #48c47a;
+  --color-dl-yellow:   #e8c040;
+
+  /* ── Animations ──────────────────────────────────── */
+  --animate-fade-up: fade-up 0.5s ease both;
+  --animate-fade-in: fade-in 0.4s ease both;
+  --animate-blink:   blink  1s step-start infinite;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+}
 
 :root {
   --amber-glow:  rgba(232, 160, 32, 0.10);
