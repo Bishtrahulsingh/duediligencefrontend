@@ -27,6 +27,7 @@ const features = [
 ]
 
 export default function LoginPage() {
+  const base_url = process.env.NEXT_PUBLIC_BACKEND_URL
   const router = useRouter()
   const [email,    setEmail]    = useState('')
   const [password, setPassword] = useState('')
@@ -38,8 +39,7 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      // POST /auth/login  →  FastAPI sets HttpOnly cookie
-      const res = await fetch('/auth/login', {
+      const res = await fetch(base_url+'/auth/login', {
         method:      'POST',
         credentials: 'include',
         headers:     { 'Content-Type': 'application/json' },

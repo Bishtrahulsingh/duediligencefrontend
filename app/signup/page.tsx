@@ -69,6 +69,7 @@ function GoogleIcon() {
 }
 
 export default function SignupPage() {
+  const base_url = process.env.NEXT_PUBLIC_BACKEND_URL
   const router = useRouter()
   const [email,    setEmail]    = useState('')
   const [password, setPassword] = useState('')
@@ -92,7 +93,7 @@ export default function SignupPage() {
     setLoading(true)
     try {
       // POST /auth/register  →  FastAPI creates user via Supabase
-      const res = await fetch('/auth/register', {
+      const res = await fetch(base_url+'/auth/register', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ email, password }),
