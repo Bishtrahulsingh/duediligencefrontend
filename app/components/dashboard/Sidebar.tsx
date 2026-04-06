@@ -8,29 +8,31 @@ import {
   FolderOpen, Activity, Code2,
 } from 'lucide-react'
 import { cn } from '@/app/lib/utils'
-
-const navItems = [
-  { section: 'Overview', items: [
-    { label: 'Dashboard', href: '/dashboard',          icon: LayoutGrid ,badge:'' },
-    { label: 'Analyse',   href: '/dashboard/analyse',  icon: Search,    badge: 'AI' },
-  ]},
-  { section: 'Management', items: [
-    { label: 'Companies', href: '/dashboard/companies', icon: Building2,  badge: '4' },
-    { label: 'Documents', href: '/dashboard/documents', icon: FolderOpen, badge: '11' },
-  ]},
-  { section: 'System', items: [
-    { label: 'Pipeline',  href: '/dashboard/pipeline',  icon: Activity,   dot: true },
-    { label: 'API Docs',  href: '#',                    icon: Code2 , badge:''},
-  ]},
-]
+import { useCompanies } from '@/app/lib/CompaniesContext'
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const { companies, loading } = useCompanies()
+
+  const navItems = [
+    { section: 'Overview', items: [
+      { label: 'Dashboard', href: '/dashboard',           icon: LayoutGrid, badge: '' },
+      { label: 'Analyse',   href: '/dashboard/analyse',   icon: Search,     badge: 'AI' },
+    ]},
+    { section: 'Management', items: [
+      { label: 'Companies', href: '/dashboard/companies', icon: Building2,  badge: loading ? '…' : String(companies.length) },
+      { label: 'Documents', href: '/dashboard/documents', icon: FolderOpen, badge: '' },
+    ]},
+    { section: 'System', items: [
+      { label: 'Pipeline',  href: '/dashboard/pipeline',  icon: Activity,   dot: true },
+      { label: 'API Docs',  href: '#',                    icon: Code2,      badge: '' },
+    ]},
+  ]
 
   return (
     <aside className="md:flex flex-col md:w-55 shrink-0 h-fit md:h-screen sticky top-0 bg-dl-surface border-r border-dl-border z-10">
       {/* Brand */}
-      <div className="px-5 pt-6 pb-5 border-b border-dl-border flex justify-between md:block ">
+      <div className="px-5 pt-6 pb-5 border-b border-dl-border flex justify-between md:block">
         <Link href="/" className="flex items-center gap-3 no-underline w-fit">
           <div className="flex items-center justify-center w-8 h-8 bg-dl-amber rounded-lg">
             <FileText size={16} strokeWidth={2.5} className="text-dl-bg" />
@@ -44,10 +46,10 @@ export default function Sidebar() {
             </div>
           </div>
         </Link>
-        <Link  href={'/dashboard/companies'}>
-        <Button className='bg-dl-amber text-black block md:hidden '>
-          request filings
-        </Button>
+        <Link href="/dashboard/companies">
+          <Button className="bg-dl-amber text-black block md:hidden">
+            Request filings
+          </Button>
         </Link>
       </div>
 
@@ -59,7 +61,7 @@ export default function Sidebar() {
               {section}
             </div>
             {items.map(({ label, href, icon: Icon, badge, dot }) => {
-              const active = pathname === href
+              const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
               return (
                 <Link
                   key={label}
@@ -96,16 +98,16 @@ export default function Sidebar() {
       {/* User */}
       <div className="hidden md:block px-3 py-4 border-t border-dl-border">
         <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg bg-dl-surface2 cursor-pointer hover:bg-dl-surface3 transition-colors">
-          <div className="flex items-center justify-center w-7 h-7 rounded-full bg-linear-to-br from-[#a06510] to-dl-amber font-mono text-[11px] text-dl-bg font-medium shrink-0">
+          <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-[#a06510] to-dl-amber font-mono text-[11px] text-dl-bg font-medium shrink-0">
             RA
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-[12px] font-medium text-dl-text truncate">Rahul A.</div>
-            <div className="font-mono text-[10px] text-dl-text3">analyst</div>
+            <div className="text-[12px] font-medium text-dl-text truncate">Analyst</div>
+            <div className="font-mono text-[10px] text-dl-text3">due diligence</div>
           </div>
-          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="text-dl-text3 shrink-0">
-            <circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" />
-          </svg>
+          <Link href="/login" className="text-dl-text3 hover:text-dl-amber transition-colors font-mono text-[10px]">
+            Sign out
+          </Link>
         </div>
       </div>
     </aside>
