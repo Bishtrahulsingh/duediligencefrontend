@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import Topbar from '@/app/components/dashboard/Topbar'
 import CompaniesTable from '@/app/components/dashboard/CompaniesTable'
+import { useEffect, useState } from 'react'
 
 const stats = [
   { label: 'Companies Tracked', value: '4',   sub: '↑ 2 this month',        subColor: 'text-dl-green' },
@@ -12,6 +13,24 @@ const stats = [
 ]
 
 export default function DashboardPage() {
+  const [companies,setCompanies] = useState([])
+  const base_url = process.env.NEXT_PUBLIC_BACKEND_URL
+  useEffect(()=>{
+    async function getCompanies() {
+      try {
+        const res = await fetch(base_url+'/auth/login', {
+          method:      'POST',
+          credentials: 'include',
+          headers:     { 'Content-Type': 'application/json' },
+          body:        JSON.stringify({ email, password }),
+        })
+      } catch {
+        
+      } finally {
+        setLoading(false)
+      }
+    }
+  },[])
   const router = useRouter()
 
   return (
