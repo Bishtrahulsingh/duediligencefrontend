@@ -10,8 +10,6 @@ import { Button }  from '@/app/components/ui/Button'
 import { Input }   from '@/app/components/ui/Input'
 
 
-
-
 function GoogleButton() {
   async function handleGoogleSignIn() {
     const supabase = createClient()
@@ -72,7 +70,9 @@ export default function LoginPage() {
         headers:     { 'Content-Type': 'application/json' },
         body:        JSON.stringify({ email, password }),
       })
+
       if (!res.ok) {
+        console.log("hello")
         const data = await res.json()
         setError(data.detail ?? 'Login failed')
         return

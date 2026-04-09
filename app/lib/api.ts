@@ -3,7 +3,16 @@
  * Base URL is read from NEXT_PUBLIC_BACKEND_URL.
  */
 
+import { createClient } from '@/app/lib/supabase'
+
 const BASE = () => process.env.NEXT_PUBLIC_BACKEND_URL ?? ''
+
+export class ApiError extends Error {
+  constructor(public status: number, message: string) {
+    super(message)
+    this.name = 'ApiError'
+  }
+}
 
 async function request<T>(
   path: string,
@@ -14,10 +23,23 @@ async function request<T>(
     headers: { 'Content-Type': 'application/json', ...(options.headers ?? {}) },
     ...options,
   })
+
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: 'Request failed' }))
-    throw new Error(err.detail ?? 'Request failed')
+
+    if (res.status === 401 && typeof window !== 'undefined') {
+      // Force sign out from Supabase so middleware clears the session cookie.
+      // Without this, middleware sees a still-valid Supabase session on /login
+      // and immediately redirects back to /dashboard — infinite loop.
+      const supabase = createClient()
+      await supabase.auth.signOut()
+      window.location.href = '/login'
+      return new Promise(() => {})
+    }
+
+    throw new ApiError(res.status, err.detail ?? 'Request failed')
   }
+
   return res.json() as Promise<T>
 }
 
@@ -59,7 +81,6 @@ export const companies = {
       body: JSON.stringify(payload),
     }),
 
-  /** Auto-fetch 10-K filings from EDGAR and embed them */
   searchAndStore: (payload: { name: string; ticker: string; year: number[] }) =>
     request('/api/v1/search/company', {
       method: 'POST',
@@ -82,14 +103,12 @@ export interface Document {
 }
 
 export const documents = {
-  /** Get documents for a specific company + fiscal_year */
   listForCompany: (ticker: string, fiscal_year: string): Promise<Document[]> =>
     request('/api/v1/storage/documents', {
       method: 'POST',
       body: JSON.stringify({ ticker, fiscal_year }),
     }),
 
-  /** Ingest a PDF URL */
   ingest: (payload: {
     company_id: string
     title: string

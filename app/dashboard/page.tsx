@@ -18,7 +18,7 @@ export default function DashboardPage() {
     },
     {
       label: 'Fiscal Years',
-      value: loading ? '…' : String(new Set(companies.map((c) => c.fiscal_year).filter(Boolean)).size || '—'),
+      value: loading ? '…' : String(new Set(companies.map((c) => c.fiscal_year)).size || '—'),
       sub: 'unique years indexed',
       subColor: 'text-dl-amber',
     },
