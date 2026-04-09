@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Activity, Shield, FileText } from 'lucide-react'
 import AuthLayout from '@/app/components/auth/AuthLayout'
 import { Button } from '@/app/components/ui/Button'
+ import { persistEmail } from '@/app/lib/useAdmin'
 import { Input } from '@/app/components/ui/Input'
 
 const features = [
@@ -52,6 +53,7 @@ export default function LoginPage() {
         return
       }
 
+      persistEmail(email)
       router.push('/dashboard')
     } catch {
       setError('Network error — is the API running?')

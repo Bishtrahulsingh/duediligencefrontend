@@ -5,15 +5,17 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   FileText, LayoutGrid, Search, Building2,
-  FolderOpen, Activity, Code2, LogOut,
+  FolderOpen, Activity, Code2, LogOut, Shield,
 } from 'lucide-react'
 import { cn } from '@/app/lib/utils'
 import { useCompanies } from '@/app/lib/CompaniesContext'
+import { useAdmin, clearEmail } from '@/app/lib/useAdmin'
 
 export default function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const { companies, loading } = useCompanies()
+  const { email, isAdmin } = useAdmin()
 
   const navItems = [
     { section: 'Overview', items: [
@@ -26,6 +28,7 @@ export default function Sidebar() {
     ]},
     { section: 'System', items: [
       { label: 'Pipeline',  href: '/dashboard/pipeline',  icon: Activity,   dot: true },
+      ...(isAdmin ? [{ label: 'Admin',    href: '/dashboard/admin',    icon: Shield,     badge: 'ADMIN' }] : []),
       { label: 'API Docs',  href: '#',                    icon: Code2,      badge: '' },
     ]},
   ]
@@ -112,11 +115,17 @@ export default function Sidebar() {
       <div className="hidden md:block px-3 py-4 border-t border-dl-border">
         <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg bg-dl-surface2">
           <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-[#a06510] to-dl-amber font-mono text-[11px] text-dl-bg font-medium shrink-0">
-            RA
+            {email ? email.slice(0, 2).toUpperCase() : 'AN'}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-[12px] font-medium text-dl-text truncate">Analyst</div>
-            <div className="font-mono text-[10px] text-dl-text3">due diligence</div>
+            <div className="text-[12px] font-medium text-dl-text truncate">
+              {email?.split('@')[0] ?? 'Analyst'}
+            </div>
+            <div className="font-mono text-[10px] text-dl-text3 flex items-center gap-1">
+              {isAdmin
+                ? <><Shield size={8} className="text-dl-amber" /><span className="text-dl-amber">admin</span></>
+                : 'due diligence'}
+            </div>
           </div>
           <button
             onClick={handleSignOut}
