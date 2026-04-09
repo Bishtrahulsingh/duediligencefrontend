@@ -78,17 +78,17 @@ const PIPELINE_STEPS = [
   { name: 'HyDE Retrieval', desc: 'Hypothetical doc embedding · top 20' },
   { name: 'BM25 + RRF',     desc: 'Sparse + dense hybrid reranking'      },
   { name: 'Cross-encoder',  desc: 'Reranker · top 5 chunks'              },
-  { name: 'Analyst LLM',    desc: 'gemini-2.5-flash · initial answer'    },
-  { name: 'Judge LLM',      desc: 'gpt-oss-20b · faithfulness + polish'  },
+  { name: 'Analyst LLM',    desc: '· initial answer'    },
+  { name: 'Judge LLM',      desc: '· faithfulness + polish'  },
 ]
 
 const HINTS = [
-  'Key revenue risks?',
-  'Competitive moat analysis',
-  'Debt & liquidity position',
-  'What are the red flags?',
-  'Growth drivers for next FY',
-  'Regulatory exposure',
+  'What risks does the company mention?',
+  'What is the company\'s primary revenue source?',
+  'Are there any ongoing legal issues?',
+  'What is the current debt level?',
+  'Who are the main competitors?',
+  'What is the revenue growth trend?',
 ]
 
 const AVATAR_COLORS = [
@@ -231,7 +231,7 @@ export default function AnalysePage() {
 
     const stepTimer = setInterval(
       () => setActiveStep((s) => (s < PIPELINE_STEPS.length - 1 ? s + 1 : s)),
-      900,
+      1200,
     )
 
     try {

@@ -2,16 +2,17 @@
 
 import { Button } from '../ui/Button'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   FileText, LayoutGrid, Search, Building2,
-  FolderOpen, Activity, Code2,
+  FolderOpen, Activity, Code2, LogOut,
 } from 'lucide-react'
 import { cn } from '@/app/lib/utils'
 import { useCompanies } from '@/app/lib/CompaniesContext'
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const { companies, loading } = useCompanies()
 
   const navItems = [
@@ -28,6 +29,18 @@ export default function Sidebar() {
       { label: 'API Docs',  href: '#',                    icon: Code2,      badge: '' },
     ]},
   ]
+
+  async function handleSignOut() {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+    } catch {
+      // Even if the request fails, redirect to login
+    }
+    router.push('/login')
+  }
 
   return (
     <aside className="md:flex flex-col md:w-55 shrink-0 h-fit md:h-screen sticky top-0 bg-dl-surface border-r border-dl-border z-10">
@@ -97,7 +110,7 @@ export default function Sidebar() {
 
       {/* User */}
       <div className="hidden md:block px-3 py-4 border-t border-dl-border">
-        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg bg-dl-surface2 cursor-pointer hover:bg-dl-surface3 transition-colors">
+        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg bg-dl-surface2">
           <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-[#a06510] to-dl-amber font-mono text-[11px] text-dl-bg font-medium shrink-0">
             RA
           </div>
@@ -105,9 +118,13 @@ export default function Sidebar() {
             <div className="text-[12px] font-medium text-dl-text truncate">Analyst</div>
             <div className="font-mono text-[10px] text-dl-text3">due diligence</div>
           </div>
-          <Link href="/login" className="text-dl-text3 hover:text-dl-amber transition-colors font-mono text-[10px]">
-            Sign out
-          </Link>
+          <button
+            onClick={handleSignOut}
+            title="Sign out"
+            className="text-dl-text3 hover:text-dl-red transition-colors p-1 rounded"
+          >
+            <LogOut size={14} strokeWidth={2} />
+          </button>
         </div>
       </div>
     </aside>

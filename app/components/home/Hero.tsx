@@ -37,7 +37,7 @@ export default function Hero() {
       {/* Actions */}
       <div className="animate-fade-up delay-4 opacity-0 relative z-10 flex items-center gap-3 mb-16">
         <Link
-          href="/signup"
+          href="/login"
           className="flex items-center gap-2 px-7 py-3.5 text-[14px] font-medium text-dl-bg bg-dl-amber border border-dl-amber rounded-[10px] transition-all hover:bg-[#f0b030]"
         >
           Start free analysis

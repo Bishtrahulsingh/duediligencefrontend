@@ -25,6 +25,16 @@ const ENDPOINTS = [
   { method: 'POST', path: '/api/result/stream',       desc: 'Query → HyDE → RRF → rerank → 2-stage LLM → SSE' },
 ]
 
+const NODES = [
+  { label: 'USER QUERY',   sub: 'POST /stream',         highlight: false },
+  { label: 'EMBED QUERY',  sub: 'fastembed local',       highlight: false },
+  { label: 'VECTOR SEARCH',sub: 'Qdrant · BM25 · RRF',  highlight: true  },
+  { label: 'RERANKER',     sub: 'cross-encoder · top 5', highlight: false },
+  { label: 'ANALYST LLM',  sub: 'gemini-2.5-flash',      highlight: false },
+  { label: 'JUDGE LLM',    sub: 'gpt-oss-20b · refine',  highlight: false },
+  { label: 'SSE',          sub: '',                       highlight: false },
+]
+
 const methodColor: Record<string, string> = {
   GET:  'text-dl-green  bg-[rgba(72,196,122,0.12)]',
   POST: 'text-dl-yellow bg-[rgba(232,192,64,0.15)]',
@@ -48,34 +58,29 @@ export default function PipelinePage() {
           </div>
         </div>
 
-        {/* Architecture SVG */}
+        {/* Architecture */}
         <div className="bg-dl-surface border border-dl-border rounded-xl p-5 overflow-x-auto">
           <div className="font-mono text-[10px] tracking-[1.5px] uppercase text-dl-text3 mb-4 text-center">
             RAG Pipeline Architecture
           </div>
-          <div className='flex justify-evenly h-48 items-center text-[12px] text-dl-text2'>
-          {/* nodes */}
-          {[
-            { label: 'USER QUERY',     sub: 'POST /stream',              highlight: false },
-            {label: 'EMBED QUERY',     sub: 'fastembed local',            highlight: false },
-            {label: 'VECTOR SEARCH',   sub: 'Qdrant · BM25 · RRF',        highlight: true  },
-            {label: 'RERANKER',        sub: 'cross-encoder · top 5',       highlight: false },
-            {label: 'ANALYST LLM',     sub: 'gemini-2.5-flash',            highlight: false },
-            {label: 'JUDGE LLM',       sub: 'gpt-oss-20b · refine',        highlight: false },
-            {label: 'SSE',             sub:'',highlight:false}
-          ].map(({label, sub, highlight }, i, arr) => (
-            <>
-            <div className={`bg-dl-bg p-7 ${highlight?'border border-dl-green':'p-7'}`}>
-              {label}
-            </div>
-            <p>{arr.length-1>i?'->':''}</p>
-            </>
-          ))}
-        </div>
+          <div className="flex justify-evenly h-48 items-center text-[12px] text-dl-text2">
+            {NODES.map(({ label, sub, highlight }, i) => (
+              <div key={label} className="flex items-center gap-2">
+                <div className={`bg-dl-bg p-4 text-center ${highlight ? 'border border-dl-green' : ''}`}>
+                  <div>{label}</div>
+                  {sub && <div className="font-mono text-[9px] text-dl-text3 mt-1">{sub}</div>}
+                </div>
+                {i < NODES.length - 1 && (
+                  <span className="text-dl-text3 text-[10px]">→</span>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Two col: stack + fallback */}
         <div className="grid grid-cols-2 gap-5">
+
           {/* Tech stack */}
           <div className="bg-dl-surface border border-dl-border rounded-xl overflow-hidden">
             <div className="px-5 py-3 border-b border-dl-border font-mono text-[10px] tracking-[1.2px] uppercase text-dl-text3">

@@ -94,7 +94,7 @@ export default function DocumentsPage() {
     <>
       <Topbar title="Documents" actionLabel="Ingest Document" onAction={() => document.getElementById('url-input')?.focus()} />
 
-      <div className="p-7 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6">
+      <div className="p-7 grid grid-cols-1 gap-6">
 
         {/* ── Document list ──────────────────────────────────── */}
         <div>
@@ -205,147 +205,7 @@ export default function DocumentsPage() {
           </div>
         </div>
 
-        {/* ── Ingest form ────────────────────────────────────── */}
-        <div>
-          <div className="mb-4">
-            <div className="font-serif text-[16px] font-normal text-dl-text">Ingest Document</div>
-            <div className="font-mono text-[11px] text-dl-text3 mt-0.5">
-              Paste a PDF URL · chunks + embeds automatically
-            </div>
-          </div>
-
-          <div className="bg-dl-surface border border-dl-border rounded-xl p-5">
-            <form onSubmit={handleIngest} className="flex flex-col gap-4">
-              {/* Drop zone */}
-              <div
-                onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
-                onDragLeave={() => setDragging(false)}
-                onDrop={(e) => {
-                  e.preventDefault(); setDragging(false)
-                  const text = e.dataTransfer.getData('text')
-                  if (text) setUrl(text)
-                }}
-                className={cn(
-                  'border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all',
-                  dragging
-                    ? 'border-dl-amber bg-[rgba(232,160,32,0.08)] text-dl-amber'
-                    : 'border-dl-border2 bg-dl-surface2 text-dl-text3 hover:border-dl-amber hover:bg-[rgba(232,160,32,0.05)] hover:text-dl-amber'
-                )}
-              >
-                <Upload size={26} className="mx-auto mb-2 opacity-70" />
-                <div className="text-[12px] font-medium">Drop a URL or paste below</div>
-                <div className="font-mono text-[10px] mt-1 opacity-70">10-K · 10-Q · Annual Reports · Prospectus</div>
-              </div>
-
-              <div className="flex items-center gap-3 font-mono text-[10px] text-dl-text3 uppercase tracking-[1px]">
-                <div className="flex-1 h-px bg-dl-border" /> or paste URL <div className="flex-1 h-px bg-dl-border" />
-              </div>
-
-              <Input
-                id="url-input"
-                label="Document URL *"
-                type="url"
-                placeholder="https://sec.gov/Archives/edgar/data/…"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-              />
-              <Input
-                label="Title"
-                placeholder="Apple 10-K 2024"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-
-              <div className="grid grid-cols-2 gap-3">
-                {/* Company selector */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="font-mono text-[10px] tracking-[1.2px] uppercase text-dl-text3">Company *</label>
-                  <select
-                    value={companyId}
-                    onChange={(e) => setCompanyId(e.target.value)}
-                    className="w-full bg-dl-surface2 border border-dl-border rounded-lg text-dl-text2 font-mono text-[11px] px-2.5 py-2.5 outline-none focus:border-dl-amber cursor-pointer"
-                  >
-                    {companiesLoading
-                      ? <option>Loading…</option>
-                      : companies.length === 0
-                      ? <option value="">— Add a company first —</option>
-                      : companies.map((c) => (
-                        <option key={c.id} value={c.id}>{c.ticker} — {c.name}</option>
-                      ))
-                    }
-                  </select>
-                </div>
-
-                {/* Doc type */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="font-mono text-[10px] tracking-[1.2px] uppercase text-dl-text3">Doc Type</label>
-                  <select
-                    value={docType}
-                    onChange={(e) => setDocType(e.target.value)}
-                    className="w-full bg-dl-surface2 border border-dl-border rounded-lg text-dl-text2 font-mono text-[11px] px-2.5 py-2.5 outline-none focus:border-dl-amber cursor-pointer"
-                  >
-                    {DOC_TYPES.map((t) => <option key={t}>{t}</option>)}
-                  </select>
-                </div>
-              </div>
-
-              {/* Fiscal year */}
-              <div className="flex flex-col gap-1.5">
-                <label className="font-mono text-[10px] tracking-[1.2px] uppercase text-dl-text3">Fiscal Year</label>
-                <select
-                  value={fiscalYear}
-                  onChange={(e) => setFiscalYear(e.target.value)}
-                  className="w-full bg-dl-surface2 border border-dl-border rounded-lg text-dl-text2 font-mono text-[12px] px-3 py-2.5 outline-none focus:border-dl-amber cursor-pointer"
-                >
-                  {YEARS.map((y) => <option key={y} value={String(y)}>FY{y}</option>)}
-                </select>
-              </div>
-
-              {/* Info */}
-              {selectedCompany && (
-                <div className="bg-dl-surface2 border border-dl-border rounded-lg px-3.5 py-2.5">
-                  <div className="font-mono text-[9px] text-dl-text3 uppercase tracking-[1px] mb-1">Target</div>
-                  <div className="font-mono text-[11px] text-dl-amber">
-                    {selectedCompany.ticker} · {selectedCompany.name}
-                  </div>
-                </div>
-              )}
-
-              {/* API hint */}
-              <div className="bg-dl-surface2 border border-dl-border rounded-lg px-3.5 py-2.5">
-                <div className="font-mono text-[9px] text-dl-text3 uppercase tracking-[1px] mb-1">API Endpoint</div>
-                <code className="font-mono text-[11px] text-dl-amber">POST /api/v1/store/document</code>
-              </div>
-
-              {error && (
-                <p className="font-mono text-[11px] text-dl-red bg-[rgba(224,85,85,0.08)] border border-[rgba(224,85,85,0.2)] rounded-lg px-3 py-2">
-                  ✗ {error}
-                </p>
-              )}
-              {success && (
-                <p className="font-mono text-[11px] text-dl-green bg-[rgba(72,196,122,0.08)] border border-[rgba(72,196,122,0.2)] rounded-lg px-3 py-2 flex items-start gap-2">
-                  <CheckCircle2 size={13} className="mt-0.5 shrink-0" />
-                  {success}
-                </p>
-              )}
-
-              <Button
-                variant="primary"
-                type="submit"
-                fullWidth
-                disabled={loading || !url.trim() || !companyId}
-                className="gap-2"
-              >
-                {loading ? (
-                  <><RefreshCw size={12} className="animate-spin" /> Ingesting…</>
-                ) : (
-                  <><Upload size={13} /> Ingest & Embed →</>
-                )}
-              </Button>
-            </form>
-          </div>
         </div>
-      </div>
     </>
   )
 }

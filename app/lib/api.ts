@@ -3,9 +3,9 @@
  * Base URL is read from NEXT_PUBLIC_BACKEND_URL.
  */
 
-import { createClient } from '@/app/lib/supabase'
-
 const BASE = () => process.env.NEXT_PUBLIC_BACKEND_URL ?? ''
+
+let isLoggingOut = false
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -28,12 +28,22 @@ async function request<T>(
     const err = await res.json().catch(() => ({ detail: 'Request failed' }))
 
     if (res.status === 401 && typeof window !== 'undefined') {
-      // Force sign out from Supabase so middleware clears the session cookie.
-      // Without this, middleware sees a still-valid Supabase session on /login
-      // and immediately redirects back to /dashboard — infinite loop.
-      const supabase = createClient()
-      await supabase.auth.signOut()
-      window.location.href = '/login'
+      // Guard against multiple simultaneous 401s all triggering logout
+      if (!isLoggingOut) {
+        isLoggingOut = true
+        // Call backend logout to properly clear httpOnly cookies.
+        // Without this the middleware still sees the (bad) access_token
+        // cookie and keeps redirecting back to /dashboard — infinite loop.
+        try {
+          await fetch(`${BASE()}/auth/logout`, {
+            method: 'POST',
+            credentials: 'include',
+          })
+        } catch {
+          // Ignore — we redirect regardless
+        }
+        window.location.href = '/login'
+      }
       return new Promise(() => {})
     }
 
@@ -107,6 +117,13 @@ export const documents = {
     request('/api/v1/storage/documents', {
       method: 'POST',
       body: JSON.stringify({ ticker, fiscal_year }),
+    }),
+
+  // Fetches available fiscal years for a given ticker from the documents table
+  yearsForTicker: (ticker: string): Promise<number[]> =>
+    request('/api/v1/storage/documents/years', {
+      method: 'POST',
+      body: JSON.stringify({ ticker }),
     }),
 
   ingest: (payload: {
