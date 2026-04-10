@@ -1,11 +1,9 @@
 /**
  * Centralized API service — all backend calls go through here.
  *
- * Auth calls go to Next.js proxy routes (/api/auth/*) which set cookies
- * on the frontend domain so the middleware can see them.
- *
- * All other backend calls use the /backend/* prefix which Next.js rewrites
- * to the real backend URL, forwarding the Cookie header automatically.
+ * Auth calls  → /api/auth/*        (Next.js route handlers that set cookies)
+ * Other calls → /api/proxy/*       (Next.js catch-all that forwards the cookie
+ *                                   as Authorization: Bearer to the real backend)
  */
 
 let isLoggingOut = false;
@@ -34,7 +32,6 @@ async function request<T>(
       if (!isLoggingOut) {
         isLoggingOut = true;
         try {
-          // Call our Next.js logout proxy — clears cookies on the frontend domain
           await fetch("/api/auth/logout", { method: "POST" });
         } catch {
           // ignore
@@ -54,13 +51,13 @@ async function request<T>(
 
 export const auth = {
   login: (email: string, password: string) =>
-    request("/api/auth/login", {          // Next.js proxy route
+    request("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
 
   register: (email: string, password: string) =>
-    request("/backend/auth/register", {   // rewritten to backend
+    request("/api/proxy/auth/register", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
@@ -80,16 +77,16 @@ export interface Company {
 
 export const companies = {
   list: (): Promise<Company[]> =>
-    request("/backend/api/v1/company/distinct"),
+    request("/api/proxy/api/v1/company/distinct"),
 
   create: (payload: { name: string; ticker: string; sector: string }) =>
-    request("/backend/api/v1/company", {
+    request("/api/proxy/api/v1/company", {
       method: "POST",
       body: JSON.stringify(payload),
     }),
 
   searchAndStore: (payload: { name: string; ticker: string; year: number[] }) =>
-    request("/backend/api/v1/search/company", {
+    request("/api/proxy/api/v1/search/company", {
       method: "POST",
       body: JSON.stringify(payload),
     }),
@@ -111,13 +108,13 @@ export interface Document {
 
 export const documents = {
   listForCompany: (ticker: string, fiscal_year: string): Promise<Document[]> =>
-    request("/backend/api/v1/storage/documents", {
+    request("/api/proxy/api/v1/storage/documents", {
       method: "POST",
       body: JSON.stringify({ ticker, fiscal_year }),
     }),
 
   yearsForTicker: (ticker: string): Promise<number[]> =>
-    request("/backend/api/v1/storage/documents/years", {
+    request("/api/proxy/api/v1/storage/documents/years", {
       method: "POST",
       body: JSON.stringify({ ticker }),
     }),
@@ -129,7 +126,7 @@ export const documents = {
     source: string;
     fiscal_year: number;
   }) =>
-    request("/backend/api/v1/store/document", {
+    request("/api/proxy/api/v1/store/document", {
       method: "POST",
       body: JSON.stringify(payload),
     }),
@@ -158,7 +155,7 @@ export interface StructuredAnalysis {
 
 export const analysis = {
   query: (payload: AnalysisPayload): Promise<AnalysisResult> =>
-    request("/backend/api/result/stream", {
+    request("/api/proxy/api/result/stream", {
       method: "POST",
       body: JSON.stringify(payload),
     }),

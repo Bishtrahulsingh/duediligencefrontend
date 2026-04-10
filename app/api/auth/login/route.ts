@@ -26,14 +26,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(data, { status: backendRes.status });
   }
 
-  const isSecure = process.env.NODE_ENV === "production";
+  const isProduction = process.env.NODE_ENV === "production";
   const response = NextResponse.json(data);
 
   if (data.access_token) {
     response.cookies.set("access_token", data.access_token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: isSecure,
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
       maxAge: 60 * 60 * 24,
       path: "/",
     });
@@ -41,8 +41,8 @@ export async function POST(req: NextRequest) {
   if (data.refresh_token) {
     response.cookies.set("refresh_token", data.refresh_token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: isSecure,
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
       maxAge: 60 * 60 * 24 * 7,
       path: "/",
     });
