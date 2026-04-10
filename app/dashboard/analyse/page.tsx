@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
   Shield, AlertTriangle, HelpCircle, BarChart2,
@@ -279,7 +279,7 @@ function EvidencePill({
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
-export default function AnalysePage() {
+function AnalysePageInner() {
   const searchParams = useSearchParams()
   const { tickerMap, fetchYearsForTicker, yearCache, loading: companiesLoading } = useCompanies()
 
@@ -843,5 +843,13 @@ export default function AnalysePage() {
         </div>
       </div>
     </>
+  )
+}
+
+export default function AnalysePage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-screen text-dl-muted">Loading…</div>}>
+      <AnalysePageInner />
+    </Suspense>
   )
 }
