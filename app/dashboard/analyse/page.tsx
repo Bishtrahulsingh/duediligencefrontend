@@ -357,8 +357,8 @@ export default function AnalysePage() {
       const parsed = parseResponse(data)
       if (parsed) {
         setResult(parsed)
-      } else if (typeof (data as Record<string,unknown>).response === 'string') {
-        setStreamText((data as Record<string,unknown>).response as string)
+      } else if (typeof (data as unknown as Record<string,unknown>).response === 'string') {
+        setStreamText((data as unknown as Record<string,unknown>).response as string)
       } else {
         setStreamText(JSON.stringify(data, null, 2))
       }
