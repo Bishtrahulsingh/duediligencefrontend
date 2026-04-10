@@ -7,6 +7,7 @@ import { Check, Lock, Clock } from 'lucide-react'
 import AuthLayout from '@/app/components/auth/AuthLayout'
 import { Button }  from '@/app/components/ui/Button'
 import { Input }   from '@/app/components/ui/Input'
+import { createClient } from '@/app/lib/supabase'
 
 const features = [
   {
@@ -72,6 +73,16 @@ export default function SignupPage() {
   const base_url = process.env.NEXT_PUBLIC_BACKEND_URL
   const router = useRouter()
   const [email,    setEmail]    = useState('')
+
+  async function handleGoogleLogin() {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+  }
   const [password, setPassword] = useState('')
   const [confirm,  setConfirm]  = useState('')
   const [loading,  setLoading]  = useState(false)
@@ -134,7 +145,10 @@ export default function SignupPage() {
 
       {/* Google */}
       <div className="animate-fade-up delay-1 opacity-0 mb-5">
-        <button className="flex items-center justify-center gap-2.5 w-full py-2.5 px-4 text-[13px] text-dl-text2 bg-dl-surface2 border border-dl-border rounded-lg hover:border-dl-border2 hover:text-dl-text transition-all">
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          className="flex items-center justify-center gap-2.5 w-full py-2.5 px-4 text-[13px] text-dl-text2 bg-dl-surface2 border border-dl-border rounded-lg hover:border-dl-border2 hover:text-dl-text transition-all">
           <GoogleIcon />
           Continue with Google
         </button>
