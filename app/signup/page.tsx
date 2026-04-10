@@ -30,10 +30,10 @@ const features = [
 function getStrength(pw: string): { score: number; label: string; color: string } {
   if (!pw) return { score: 0, label: 'Enter a password', color: 'text-dl-text3' }
   let s = 0
-  if (pw.length >= 8)        s++
-  if (/[A-Z]/.test(pw))      s++
-  if (/[0-9]/.test(pw))      s++
-  if (/[^A-Za-z0-9]/.test(pw)) s++
+  if (pw.length >= 8)           s++
+  if (/[A-Z]/.test(pw))         s++
+  if (/[0-9]/.test(pw))         s++
+  if (/[^A-Za-z0-9]/.test(pw))  s++
   const labels = ['', 'Weak', 'Fair', 'Good', 'Strong']
   const colors = ['', 'text-dl-red', 'text-dl-amber', 'text-dl-amber', 'text-dl-green']
   return { score: s, label: labels[s] || 'Weak', color: colors[s] || 'text-dl-red' }
@@ -70,9 +70,14 @@ function GoogleIcon() {
 }
 
 export default function SignupPage() {
-  const base_url = process.env.NEXT_PUBLIC_BACKEND_URL
   const router = useRouter()
   const [email,    setEmail]    = useState('')
+  const [password, setPassword] = useState('')
+  const [confirm,  setConfirm]  = useState('')
+  const [loading,  setLoading]  = useState(false)
+  const [error,    setError]    = useState('')
+
+  const strength = getStrength(password)
 
   async function handleGoogleLogin() {
     const supabase = createClient()
@@ -83,12 +88,6 @@ export default function SignupPage() {
       },
     })
   }
-  const [password, setPassword] = useState('')
-  const [confirm,  setConfirm]  = useState('')
-  const [loading,  setLoading]  = useState(false)
-  const [error,    setError]    = useState('')
-
-  const strength = getStrength(password)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -103,8 +102,8 @@ export default function SignupPage() {
     }
     setLoading(true)
     try {
-      // POST /auth/register  →  FastAPI creates user via Supabase
-      const res = await fetch(base_url+'/auth/register', {
+      // ✅ Goes through Next.js rewrite → backend, no cross-origin issues
+      const res = await fetch('/backend/auth/register', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ email, password }),
